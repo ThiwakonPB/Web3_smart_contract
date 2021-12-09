@@ -22,7 +22,7 @@ interface ABC:
 event BidAdded:
     _operator: indexed(address)
     _bidId: indexed(uint256)
-    _value: uint256s
+    _value: uint256
 
 event BidIncreased:
     _operator: indexed(address)
