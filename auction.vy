@@ -1,4 +1,3 @@
-
 from vyper.interfaces import ERC20
 
 
@@ -23,7 +22,7 @@ interface ABC:
 event BidAdded:
     _operator: indexed(address)
     _bidId: indexed(uint256)
-    _value: uint256
+    _value: uint256s
 
 event BidIncreased:
     _operator: indexed(address)
@@ -58,7 +57,7 @@ DEEPEST_LEVEL: constant(int128) = 0
 MAX_BATCH_SIZE: constant(uint256) = 100
 
 # Bid retrieval batch size
-BID_RETRIEVAL_BATCH_SIZE: constant(uint256) = 1
+BID_RETRIEVAL_BATCH_SIZE: constant(uint256) = 10
 
 # Contract configuration
 MAX_AUCTION_ITEMS: constant(uint256) = 5000000
@@ -169,48 +168,94 @@ def contractVersion() -> uint256:
     return CONTRACT_VERSION
 
 
-#### Auction utilities ####
+@external
+def __init__(
+    _tokenContract: address,
+    _tokenType: uint256,
+    _minTokenId: uint256,
+    _maxTokenId: uint256,
+    _currencyAddress: address,
+    _minimumBid: uint256,
+    _startDate: uint256,
+    _endDate: uint256,
+    _extendingTime: uint256
+):
+    """
+    _tokenContract - address of token contract.
 
-@internal
-@view
-def getBidId(_bidder: address, _bidSequence: uint256) -> uint256:
-    msbs: uint256 = shift(convert(_bidder, uint256), 96)
-    bidId: uint256 = bitwise_or(msbs, _bidSequence)
+    _tokenType - type of ABC token.
 
-    return bidId
+    _minTokneId - an index of token with minimum sequence number that make
+    it be the most valuable token of the auction.
 
+    _minTokneId - an index of token with maximum sequence number that make
+    it be the least valuable token of the auction.
 
-@internal
-def getNewBidId(_bidder: address) -> uint256:
-    self.bidders[_bidder].lastSequence += 1
-    return self.getBidId(_bidder, self.bidders[_bidder].lastSequence)
+    _currencyAddress - ERC20 contract address that going to be main
+    currency of the auction contract
 
+    _minimumBid - Minimium acceptable bid of the acution
 
-@internal
-@view
-def _getState() -> uint256:
-    if block.timestamp < self.extendedEnd and self.open == True:
-        if self.paused:
-            return PAUSED_STATE
-        else:
-            if block.timestamp >= self.startDate:
-                if block.timestamp < self.endDate - self.extendingTime:
-                    return OPEN_STATE
-                else:
-                    return SUDDEN_DEATH_STATE
-            else:
-                return PENDING_STATE
-    else:
-        return CLOSED_STATE
+    _startDate - the datetime when the auction can accept bids.
+
+    _endDate - the datetime when the auction ends normal bidding activities.
+
+    _extendingTime - the timedelta to extend the auction end time
+    """
+    assert _maxTokenId >= _minTokenId, "Max token id is less than minimum one"
+    assert block.timestamp < _endDate, \
+           "End of the auction is earlier than current time"
+    assert _startDate < _endDate, \
+           "End of the auction is earlier than its start date"
+    quantity: uint256 = _maxTokenId - _minTokenId + 1
+    assert quantity <= MAX_AUCTION_ITEMS, \
+           "Total quantity of tokens exceeded maximum allowance"
+
+    # Check currency address is ERC20 contract
+
+    self.minTokenId = _minTokenId
+    self.maxTokenId = _maxTokenId
+
+    self.tokenContract = _tokenContract
+    self.tokenType = _tokenType
+
+    self.tokenQty = quantity
+    self.bidAverage = 0
+
+    self.contractOwner = msg.sender
+    self.currencyAddress = _currencyAddress
+    self.minimumBid = _minimumBid
+
+    self.open = True
+    self.startDate = _startDate
+    self.endDate = _endDate
+    self.extendedEnd = _endDate
+    self.extendingTime = _extendingTime
+    self.testCount = 0
 
 
 @external
 @view
-def getState() -> uint256:
-    return self._getState()
+def getBids(
+       _startBid: uint256,
+       _size: int128) -> uint256[2][BID_RETRIEVAL_BATCH_SIZE]:
+   assert _size > 0
 
+   # bids: uint256[2][BID_RETRIEVAL_BATCH_SIZE]
+   bids: uint256[2][BID_RETRIEVAL_BATCH_SIZE] = empty(uint256[2][BID_RETRIEVAL_BATCH_SIZE])
+   bid: Bid = self.levels[_startBid][DEEPEST_LEVEL]
+   bidId: uint256 = _startBid
+
+   for i in range(BID_RETRIEVAL_BATCH_SIZE):
+       if bidId == 0 or i >= _size:
+           break
+       bid = self.levels[bidId][DEEPEST_LEVEL]
+       bids[i] = [bidId, bid.value]
+       bidId = bid.prevBid
+   return bids
 
 @external
 def test() -> int128:
-    self.testCount = self.testCount + 1
+    self.testCount += 1
     return self.testCount
+
