@@ -2,5 +2,6 @@ bytecode: 0x34600055336001556006600255476003556100c856600436101561000d576100a856
 abi: [{"stateMutability": "payable", "type": "constructor", "inputs": [], "outputs": []}, {"stateMutability": "payable", "type": "function", "name": "payBeat", "inputs": [], "outputs": [], "gas": 38588}, {"stateMutability": "view", "type": "function", "name": "amount_deposit", "inputs": [], "outputs": [{"name": "", "type": "uint256"}], "gas": 2556}, {"stateMutability": "view", "type": "function", "name": "beatAddress", "inputs": [], "outputs": [{"name": "", "type": "address"}], "gas": 2586}, {"stateMutability": "view", "type": "function", "name": "version", "inputs": [], "outputs": [{"name": "", "type": "int128"}], "gas": 2616}, {"stateMutability": "view", "type": "function", "name": "current_balance", "inputs": [], "outputs": [{"name": "", "type": "uint256"}], "gas": 2646}]
 nodeip: http://localhost:8545
 private_key: e08dae4c5fb1bc06d3d1ae74865fee67b62db2d20be3decc26251052fbb7da4c
+contract_address: '0x26FBA9016fD41072533fD0d2cf4cA21623Cde22B'
 args: 
 value: 2 # in ethers
