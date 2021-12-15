@@ -13,9 +13,27 @@ if sys.argv[1] == "compile":
 elif sys.argv[1] == "deploy":
     os.system("vyper ./vyper_src/" + sys.argv[2] + " > ./config/bytecode.txt")
     os.system("vyper -f abi_python ./vyper_src/" + sys.argv[2] + " > ./config/abi.txt")
+    try:
+        if sys.argv[3]:
+            key = 'args'
+            with open('./config/config.yaml') as database:
+                data = yaml.safe_load((database))
+                data[key] = sys.argv[3]
+            with open("./config/config.yaml", "w") as f:
+                yaml.dump(data, f)
+    except:
+        print("No arguments provided")
     os.system("python ./python_src/deploy-from-yaml.py")
 
 elif sys.argv[1] == "nodeip" or sys.argv[1] == "private_key" or sys.argv[1] == "contract_address" or sys.argv[1] == "gas":
+    key = sys.argv[1]
+    with open('./config/config.yaml') as database:
+        data = yaml.safe_load((database))
+        data[key] = sys.argv[2]
+    with open("./config/config.yaml", "w") as f:
+        yaml.dump(data, f)
+
+elif sys.argv[1] == "interact":
     key = sys.argv[1]
     with open('./config/config.yaml') as database:
         data = yaml.safe_load((database))
