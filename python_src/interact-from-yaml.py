@@ -48,8 +48,8 @@ if data["function_transaction"]:
         'from': acct.address,
         'nonce': w3.eth.getTransactionCount(acct.address),
         'value': w3.toWei(str(data["value"]), 'ether'),
-        'gas': data["gas"],
-        'gasPrice': data["gasPrice"]
+        'gas': int(data["gas"]),
+        'gasPrice': int(data["gasPrice"])
         })
     signed = acct.signTransaction(construct_txn)
     tx_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
