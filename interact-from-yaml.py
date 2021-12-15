@@ -48,8 +48,8 @@ contract_function = getattr(contract.functions, function_name_transaction)
 construct_txn = contract_function().buildTransaction({
     'from': acct.address,
     'nonce': w3.eth.getTransactionCount(acct.address),
-    'gas': 10000000,
-    'gasPrice': 30000000000
+    'gas': data["gas"],
+    'gasPrice': data["gasPrice"]
     })
 
 signed = acct.signTransaction(construct_txn)
