@@ -52,14 +52,14 @@ if data["args"] == None:
         'nonce': w3.eth.getTransactionCount(acct.address),
         'value': w3.toWei(str(data["value"]), 'ether'),
         'gas': int(data["gas"]),
-        'gasPrice': int(data["gasPrice"]}))
+        'gasPrice': int(data["gasPrice"])})
 else:
     construct_txn = contract.constructor(*data["args"]).buildTransaction({
         'from': acct.address,
         'nonce': w3.eth.getTransactionCount(acct.address),
         'value': w3.toWei(str(data["value"]), 'ether'),
         'gas': int(data["gas"]),
-        'gasPrice': int(data["gasPrice"]}))
+        'gasPrice': int(data["gasPrice"])})
 
 
 signed = acct.signTransaction(construct_txn)    
