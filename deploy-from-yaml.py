@@ -4,11 +4,21 @@ import yaml
 
 
 # get config yaml
-with open("config.yaml", "r") as stream:
+with open("config/config.yaml", "r") as stream:
     try:
         data = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
         print(exc)
+
+
+# get abi
+with open("config/abi.txt", "r") as stream:
+    box_abi = stream.read()[:-1]
+
+
+# get bytecode
+with open("config/bytecode.txt", "r") as stream:
+    box_bytecode = stream.read()[:-1]
 
 
 # connect to node
@@ -30,8 +40,8 @@ print("Address: ", acct.address)
 
 # create contract with abi and bytecode
 contract = w3.eth.contract(
-    abi=data["abi"],
-    bytecode=data["bytecode"]
+    abi=box_abi,
+    bytecode=box_bytecode
 )
 
 
@@ -41,15 +51,15 @@ if data["args"] == None:
         'from': acct.address,
         'nonce': w3.eth.getTransactionCount(acct.address),
         'value': w3.toWei(str(data["value"]), 'ether'),
-        'gas': 9000000,
-        'gasPrice': 30000000000})
+        'gas': data["gas"],
+        'gasPrice': data["gasPrice"]})
 else:
     construct_txn = contract.constructor(*data["args"]).buildTransaction({
         'from': acct.address,
         'nonce': w3.eth.getTransactionCount(acct.address),
         'value': w3.toWei(str(data["value"]), 'ether'),
-        'gas': 9000000,
-        'gasPrice': 30000000000})
+        'gas': data["gas"],
+        'gasPrice': data["gasPrice"]})
 
 
 signed = acct.signTransaction(construct_txn)    
