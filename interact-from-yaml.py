@@ -2,6 +2,10 @@ from web3 import Web3
 from web3 import HTTPProvider
 import yaml
 
+# function configs
+function_name_transaction = "test"
+function_call = "testCount"
+
 
 # get config yaml
 with open("config/config.yaml", "r") as stream:
@@ -40,7 +44,7 @@ contract = w3.eth.contract(
     abi=box_abi
 )
 
-contract_function = getattr(contract.functions, "test")
+contract_function = getattr(contract.functions, function_name_transaction)
 construct_txn = contract_function().buildTransaction({
     'from': acct.address,
     'nonce': w3.eth.getTransactionCount(acct.address),
@@ -54,5 +58,5 @@ tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 print(tx_receipt)
 # print(contract.caller().version()) 
 contract_caller = contract.caller() 
-response = getattr(contract_caller, "testCount")
-print(response())
+response = getattr(contract_caller, function_call)
+print(f"{function_call}: {response()}")
