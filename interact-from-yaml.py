@@ -36,12 +36,12 @@ print("Contract Address: ", data["contract_address"])
 
 # load contract with address and abi
 contract = w3.eth.contract(
-    # address=data["contract_address"],
     address=data["contract_address"],
     abi=box_abi
 )
 
-construct_txn = contract.functions.test().buildTransaction({
+contract_function = getattr(contract.functions, "test")
+construct_txn = contract_function().buildTransaction({
     'from': acct.address,
     'nonce': w3.eth.getTransactionCount(acct.address),
     'gas': 10000000,
