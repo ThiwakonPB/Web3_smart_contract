@@ -2,10 +2,6 @@ from web3 import Web3
 from web3 import HTTPProvider
 import yaml
 
-# function configs
-function_name_transaction = "test"
-function_call = "testCount"
-
 
 # get config yaml
 with open("config/config.yaml", "r") as stream:
@@ -44,19 +40,24 @@ contract = w3.eth.contract(
     abi=box_abi
 )
 
-contract_function = getattr(contract.functions, function_name_transaction)
-construct_txn = contract_function().buildTransaction({
-    'from': acct.address,
-    'nonce': w3.eth.getTransactionCount(acct.address),
-    'gas': data["gas"],
-    'gasPrice': data["gasPrice"]
-    })
 
-signed = acct.signTransaction(construct_txn)
-tx_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
-tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-print(tx_receipt)
-# print(contract.caller().version()) 
+# send transaction
+if data["function_transaction"]: 
+    contract_function = getattr(contract.functions, data["function_transaction"])
+    construct_txn = contract_function().buildTransaction({
+        'from': acct.address,
+        'nonce': w3.eth.getTransactionCount(acct.address),
+        'value': w3.toWei(str(data["value"]), 'ether'),
+        'gas': data["gas"],
+        'gasPrice': data["gasPrice"]
+        })
+    signed = acct.signTransaction(construct_txn)
+    tx_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
+    tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    print(tx_receipt)
+
+
+# call 
 contract_caller = contract.caller() 
-response = getattr(contract_caller, function_call)
-print(f"{function_call}: {response()}")
+response = getattr(contract_caller, data["function_call"])
+print(f"{data['function_call']}: {response()}")
