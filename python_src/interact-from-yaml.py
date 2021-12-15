@@ -44,13 +44,22 @@ contract = w3.eth.contract(
 # send transaction
 if data["function_transaction"]: 
     contract_function = getattr(contract.functions, data["function_transaction"])
-    construct_txn = contract_function().buildTransaction({
-        'from': acct.address,
-        'nonce': w3.eth.getTransactionCount(acct.address),
-        'value': w3.toWei(str(data["value"]), 'ether'),
-        'gas': int(data["gas"]),
-        'gasPrice': int(data["gasPrice"])
-        })
+    if data["args"]: # with args
+        construct_txn = contract_function(*data["args"]).buildTransaction({
+            'from': acct.address,
+            'nonce': w3.eth.getTransactionCount(acct.address),
+            'value': w3.toWei(str(data["value"]), 'ether'),
+            'gas': int(data["gas"]),
+            'gasPrice': int(data["gasPrice"])
+            })
+    else: # no args
+        construct_txn = contract_function().buildTransaction({
+            'from': acct.address,
+            'nonce': w3.eth.getTransactionCount(acct.address),
+            'value': w3.toWei(str(data["value"]), 'ether'),
+            'gas': int(data["gas"]),
+            'gasPrice': int(data["gasPrice"])
+            })
     signed = acct.signTransaction(construct_txn)
     tx_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
     tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
