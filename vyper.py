@@ -15,19 +15,13 @@ elif sys.argv[1] == "deploy":
     os.system("vyper -f abi_python ./vyper_src/" + sys.argv[2] + " > ./config/abi.txt")
     os.system("python ./python_src/deploy-from-yaml.py")
 
-elif sys.argv[1] == "nodeip":
+elif sys.argv[1] == "nodeip" or sys.argv[1] == "private_key" or sys.argv[1] == "contract_address" or sys.argv[1] == "gas":
+    key = sys.argv[1]
     with open('./config/config.yaml') as database:
         data = yaml.safe_load((database))
-        data['nodeip'] = sys.argv[2]
-    with open("./config/config.yaml", "w") as f:
-        yaml.dump(data, f)
-
-elif sys.argv[1] == "private_key":
-    with open('./config/config.yaml') as database:
-        data = yaml.safe_load((database))
-        data['private_key'] = sys.argv[2]
+        data[key] = sys.argv[2]
     with open("./config/config.yaml", "w") as f:
         yaml.dump(data, f)
 
 else:
-    print("you dumb")
+    print("Please enter the correct arguments")
