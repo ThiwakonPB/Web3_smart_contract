@@ -69,4 +69,11 @@ print(tx_receipt)
 print("---------------------------------")
 print(f"Contract Address: {tx_receipt['contractAddress']}")
 print("---------------------------------")
+print(f"contract_address has been modified.")
 
+
+with open('./config/config.yaml') as database:
+    data = yaml.safe_load((database))
+    data['contract_address'] = tx_receipt['contractAddress']
+with open("./config/config.yaml", "w") as f:
+    yaml.dump(data, f)
