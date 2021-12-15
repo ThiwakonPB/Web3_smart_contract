@@ -12,7 +12,7 @@ Set node ip
 ```
 python vyper.py nodeip 10.00.00.00:8545
 ```
-Set account with Eth already to use as 
+Set account that is already filled with crypto currency 
 ```
 python vyper.py private_key 7dfa0e753d3b9c6e3b2c76360f28cc4623c867acc8f7b041d8828ef9b8d6ddfd
 ```
