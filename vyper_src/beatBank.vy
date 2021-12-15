@@ -19,3 +19,10 @@ def __init__():
 @payable
 def payBeat():
     send(self.beatAddress, msg.value)
+
+
+@external
+@payable
+def setVersion(version: int128):
+    self.version = version
+
