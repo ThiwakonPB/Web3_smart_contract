@@ -4,13 +4,13 @@ import yaml
 
 
 # get config yaml
-with open("config.yaml", "r") as stream:
+with open("config/config.yaml", "r") as stream:
     try:
         data = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
         print(exc)
 
-print(data)
+
 # get abi
 with open("config/abi.txt", "r") as stream:
     box_abi = stream.read()[:-1]
@@ -41,18 +41,18 @@ contract = w3.eth.contract(
     abi=box_abi
 )
 
-# construct_txn = contract.functions.test().buildTransaction({
-#     'from': acct.address,
-#     'nonce': w3.eth.getTransactionCount(acct.address),
-#     'gas': 10000000,
-#     'gasPrice': 30000000000
-#     })
+construct_txn = contract.functions.test().buildTransaction({
+    'from': acct.address,
+    'nonce': w3.eth.getTransactionCount(acct.address),
+    'gas': 10000000,
+    'gasPrice': 30000000000
+    })
 
-# signed = acct.signTransaction(construct_txn)
-# tx_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
-# tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-# print(tx_receipt)
+signed = acct.signTransaction(construct_txn)
+tx_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
+tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+print(tx_receipt)
 # print(contract.caller().version()) 
 contract_caller = contract.caller() 
-response = getattr(contract_caller, "version")
+response = getattr(contract_caller, "testCount")
 print(response())
