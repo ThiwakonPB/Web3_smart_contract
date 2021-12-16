@@ -29,7 +29,7 @@ w3 = Web3(HTTPProvider(data["nodeip"]))
 is_connect = w3.isConnected()
 if not is_connect:
     print("Is connected?:",w3.isConnected())
-    raise Exception("Can't connect")
+    raise Exception("Can't connect to node")
 print("Is connected?:",w3.isConnected())
 
 
