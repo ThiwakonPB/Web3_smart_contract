@@ -61,7 +61,10 @@ def deploy():
             with open("./config/config.yaml", "w") as f:
                 yaml.dump(data, f)
     except:
-        print("Failed to add arguments")
+            print("Empty arguments")
+            data['args'] = None
+            with open("./config/config.yaml", "w") as f:
+                yaml.dump(data, f)
     if is_python3:
         os.system("python3 ./python_src/deploy-from-yaml.py")
     else:
