@@ -11,6 +11,14 @@ with open('./config/config.yaml') as database:
 is_python3 = False
 
 
+def is_intstring(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+
 def check_python():
     status = os.system(f"command -v python3")
     if status != 0:
@@ -46,9 +54,9 @@ def deploy():
             key = 'args'
             args = []
             for i in sys.argv[3:]:
-                print(i)
+                if is_intstring(i):
+                    i = int(i)
                 args.append(i)
-                print(args)
             data[key] = args
             with open("./config/config.yaml", "w") as f:
                 yaml.dump(data, f)
