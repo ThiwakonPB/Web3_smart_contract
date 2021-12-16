@@ -1,9 +1,0 @@
-nodeip: http://10.66.67.6:8545
-private_key: 7dfa0e753d3b9c6e3b2c76360f28cc4623c867acc8f7b041d8828ef9b8d6ddfd
-contract_address: '0x3fa0e0e15f419837B033D564a3ed9Baf59cCCC81' # have to be string
-args: 
-value: 5 # in ethers
-gas: 10000000
-gasPrice: 30000000000
-function_transaction: 'payBeat'
-function_call: 'beatAddress'
