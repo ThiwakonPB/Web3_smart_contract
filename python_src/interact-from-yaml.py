@@ -65,8 +65,20 @@ if data["function_transaction"]:
     tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
     print(tx_receipt)
 
+    log_to_process = tx_receipt['logs'][0]
+    processed_log = contract.events.Transfer().processLog(log_to_process)
+    print("=================")
+    print(processed_log)
+
 
 # call 
 contract_caller = contract.caller() 
 response = getattr(contract_caller, data["function_call"])
 print(f"{data['function_call']}: {response()}")
+
+
+
+# log
+# log_to_process = box['logs'][0]
+# processed_log = contract.events.myEvent().processLog(log_to_process)
+# print(processed_log)
