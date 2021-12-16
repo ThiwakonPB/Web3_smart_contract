@@ -1,7 +1,7 @@
 import os
 import sys
 import yaml
-
+from ast import literal_eval
 
 # load config file
 with open('./config/config.yaml') as database:
@@ -37,17 +37,23 @@ def vyper_compile():
     print(f.read()) 
     print(f2.read()) 
 
+
 def deploy():
     os.system("vyper ./vyper_src/" + sys.argv[2] + " > ./config/bytecode.txt")
     os.system("vyper -f abi_python ./vyper_src/" + sys.argv[2] + " > ./config/abi.txt")
     try:
         if sys.argv[3]:
             key = 'args'
-            data[key] = sys.argv[3]
+            args = []
+            for i in sys.argv[3:]:
+                print(i)
+                args.append(i)
+                print(args)
+            data[key] = args
             with open("./config/config.yaml", "w") as f:
                 yaml.dump(data, f)
     except:
-        print("No arguments provided")
+        print("Failed to add arguments")
     if is_python3:
         os.system("python3 ./python_src/deploy-from-yaml.py")
     else:
