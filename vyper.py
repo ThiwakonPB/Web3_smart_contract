@@ -1,11 +1,32 @@
-
 import os
 import sys
 import yaml
 
+
 # load config file
 with open('./config/config.yaml') as database:
     data = yaml.safe_load((database))
+    
+    
+is_python3 = False
+
+
+def check_python():
+    status = os.system(f"command -v python3")
+    if status != 0:
+        print(f"python3: not found")
+        print(f"Trying python...")
+        status2 = os.system(f"command -v python")
+        if status2 != 0:
+            print(f"python: not found")
+            print("Abort")
+            exit()
+        else:
+            print(f"Detect: python")
+    else:
+        print(f"python3: detected")
+        global is_python3 
+        is_python3 = True
 
 
 def vyper_compile():
@@ -15,7 +36,6 @@ def vyper_compile():
     f2 = open("./config/abi.txt", "r")
     print(f.read()) 
     print(f2.read()) 
-
 
 def deploy():
     os.system("vyper ./vyper_src/" + sys.argv[2] + " > ./config/bytecode.txt")
@@ -28,7 +48,10 @@ def deploy():
                 yaml.dump(data, f)
     except:
         print("No arguments provided")
-    os.system("python ./python_src/deploy-from-yaml.py")
+    if is_python3:
+        os.system("python3 ./python_src/deploy-from-yaml.py")
+    else:
+        os.system("python ./python_src/deploy-from-yaml.py")
 
 
 def config():
@@ -49,6 +72,7 @@ def interact():
 if sys.argv[1] == "compile":
     vyper_compile()
 elif sys.argv[1] == "deploy":
+    check_python()
     deploy()
 elif sys.argv[1] == "nodeip" or sys.argv[1] == "private_key" or sys.argv[1] == "contract_address" or sys.argv[1] == "gas":
     config()
