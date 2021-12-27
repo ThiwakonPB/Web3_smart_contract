@@ -63,17 +63,23 @@ if data["function_transaction"]:
     signed = acct.signTransaction(construct_txn)
     tx_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
     tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    print("=================")
     print(tx_receipt)
 
     log_to_process = tx_receipt['logs'][0]
     processed_log = contract.events.Transfer().processLog(log_to_process)
     print("=================")
+    print("[LOG]")
+    print(processed_log.args)
+    print(processed_log.args.texto)
+    print("-----------------")
     print(processed_log)
 
 
 # call 
 contract_caller = contract.caller() 
 response = getattr(contract_caller, data["function_call"])
+print("=================")
 print(f"{data['function_call']}: {response()}")
 
 
