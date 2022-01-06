@@ -25,6 +25,7 @@ is_connect = w3.isConnected()
 if not is_connect:
     print("Is connected?:",w3.isConnected())
     raise Exception("Can't connect")
+print("IP: ",data["nodeip"])
 print("Is connected?:",w3.isConnected())
 
 
