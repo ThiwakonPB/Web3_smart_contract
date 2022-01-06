@@ -49,6 +49,15 @@ def vyper_compile():
     print(f2.read()) 
 
 
+def sol_compile():
+    os.system("solc --bin ./sol_src/" + sys.argv[2] + " > ./config/bytecode.txt")
+    os.system("solc --abi ./sol_src/" + sys.argv[2] + " > ./config/abi.txt")
+    f = open("./config/bytecode.txt", "r")
+    f2 = open("./config/abi.txt", "r")
+    print(f.read()) 
+    print(f2.read()) 
+
+
 def deploy():
     if is_python3:
         os.system("python3 ./python_src/deploy-from-yaml.py")
@@ -94,8 +103,10 @@ def interact():
 
 
 # checks for user command args
-if sys.argv[1] == "compile":
+if sys.argv[1] == "vyper_compile":
     vyper_compile()
+elif sys.argv[1] == "sol_compile":
+    sol_compile()
 elif sys.argv[1] == "deploy":
     check_python()
     deploy()
