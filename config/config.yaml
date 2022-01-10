@@ -1,9 +1,11 @@
-args: null
-contract_address: '0xb778f6F6c0A65Aa98B2a9280f852a4b6AFdCF64a'
-function_call: count
-function_transaction: plusOne
+args:
+  - 1
+  - 600
+contract_address: '0xBFFF4707541a1F34Dc70D4665ECf7618Ecf0AEC2'
+function_call: supply
+function_transaction: mint
 gas: 10000000
 gasPrice: 30000000000
-nodeip: http://localhost:8545
-private_key: e08dae4c5fb1bc06d3d1ae74865fee67b62db2d20be3decc26251052fbb7da4c
+nodeip: http://10.66.67.6:8545
+private_key: d39b8cedf4c4abb9a1de310965ef82dfed5accd5a17d6cc00062d0e13e433160
 value: 0

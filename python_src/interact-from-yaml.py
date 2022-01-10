@@ -67,14 +67,17 @@ if data["function_transaction"]:
     print("=================")
     print(tx_receipt)
 
-    log_to_process = tx_receipt['logs'][0]
-    processed_log = contract.events.Transfer().processLog(log_to_process)
-    print("=================")
-    print("[LOG]")
-    print(processed_log.args)
-    print(processed_log.args.texto)
-    print("-----------------")
-    print(processed_log)
+    try:
+        log_to_process = tx_receipt['logs'][0]
+        processed_log = contract.events.Transfer().processLog(log_to_process)
+        print("=================")
+        print("[LOG]")
+        print(processed_log.args)
+        print(processed_log.args.texto)
+        print("-----------------")
+        print(processed_log)
+    except:
+        print("Error getting log")
 
 
 # call 
