@@ -81,12 +81,19 @@ if data["function_transaction"]:
 
 
 # call 
-contract_caller = contract.caller() 
-response = getattr(contract_caller, data["function_call"])
-print("=================")
-print(f"{data['function_call']}: {response()}")
-
-
+if data["function_call"]: 
+    if data["args"]: # with args
+        contract_caller = contract.caller() 
+        contract_funciton = getattr(contract_caller, data["function_call"])
+        response = contract_funciton(*data["args"])
+        print("=================")
+        print(f"{data['function_call']}: {response}")
+    else: # no args
+        contract_caller = contract.caller() 
+        response = getattr(contract_caller, data["function_call"])
+        print("=================")
+        print(f"{data['function_call']}: {response()}")
+# test by deploy a contract and call variable with args and without args
 
 # log
 # log_to_process = box['logs'][0]
