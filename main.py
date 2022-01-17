@@ -55,13 +55,19 @@ def compile(
     if contract == "Bob":
         typer.echo("Please include Contract's name")
     else:
-        typer.echo("Compiling a contract")
-        os.system("vyper ./vyper_src/" + contract + " > ./config/bytecode.txt")
-        os.system("vyper -f abi_python ./vyper_src/" + contract + " > ./config/abi.txt")
-        f = open("./config/bytecode.txt", "r")
-        f2 = open("./config/abi.txt", "r")
-        print(f.read()) 
-        print(f2.read()) 
+        # if contract already compiled before
+        if os.system(f"ls data/{contract}") == 0:
+            text = typer.style(f"Contract exists overwrite? Σ(°△°|||)", fg=typer.colors.YELLOW, bold=True)
+            typer.echo(text)
+        else:
+            os.system("vyper ./vyper_src/" + contract + " >> ./data/" + contract)
+            os.system("vyper -f abi_python ./vyper_src/" + contract + " >> ./data/" + contract)
+            text = typer.style(f"{contract} compiled <(￣︶￣)>", fg=typer.colors.GREEN, bold=True)
+            typer.echo(text)
+
+            f = open(f"./data/{contract}", "r")
+            print(f.read()) 
+            print(f.read()) 
 
 
 @app.command()
