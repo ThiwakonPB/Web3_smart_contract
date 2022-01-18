@@ -37,6 +37,30 @@ def check_python():
         is_python3 = True
 
 
+def input_no():
+    return ["n", "no", "No", "N"]
+
+
+def input_yes():
+    return ["y", "yes", "Yes", "Y"]
+
+
+def compile_helper(contract: str):
+    os.system("vyper ./vyper_src/" + contract + " > ./data/" + contract)
+    os.system("vyper -f abi_python ./vyper_src/" + contract + " >> ./data/" + contract)
+    text = typer.style(f"{contract} compiled <(￣︶￣)>", fg=typer.colors.GREEN, bold=True)
+    typer.echo(text)
+
+    print("\n") 
+    print("Bytecode and Abi below") 
+    print("========================") 
+    f = open(f"./data/{contract}", "r")
+    print(f.read()) 
+    print(f.read()) 
+    print("========================") 
+
+
+
 @app.callback()
 def callback():
     """
@@ -57,17 +81,17 @@ def compile(
     else:
         # if contract already compiled before
         if os.system(f"ls data/{contract}") == 0:
-            text = typer.style(f"Contract exists overwrite? Σ(°△°|||)", fg=typer.colors.YELLOW, bold=True)
-            typer.echo(text)
-        else:
-            os.system("vyper ./vyper_src/" + contract + " >> ./data/" + contract)
-            os.system("vyper -f abi_python ./vyper_src/" + contract + " >> ./data/" + contract)
-            text = typer.style(f"{contract} compiled <(￣︶￣)>", fg=typer.colors.GREEN, bold=True)
-            typer.echo(text)
+            text = typer.style(f"Contract exists overwrite? Σ(°△°|||) [y/N]\n", fg=typer.colors.YELLOW, bold=True)
+            user_input = input(text)
+            if user_input in input_yes():
+                text = typer.style(f"Override {contract}", fg=typer.colors.YELLOW, bold=True)
+                typer.echo(text)
+                compile_helper(contract)
+            else:
+                typer.echo("Abort")
 
-            f = open(f"./data/{contract}", "r")
-            print(f.read()) 
-            print(f.read()) 
+        else:
+            compile_helper(contract)
 
 
 @app.command()
