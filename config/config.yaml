@@ -1,11 +1,9 @@
-args:
-  - 1
-  - 600
+args: null
 contract_address: '0xBFFF4707541a1F34Dc70D4665ECf7618Ecf0AEC2'
 function_call: supply
 function_transaction: mint
 gas: 10000000
 gasPrice: 30000000000
-nodeip: http://10.66.67.6:8545
-private_key: d39b8cedf4c4abb9a1de310965ef82dfed5accd5a17d6cc00062d0e13e433160
+nodeip: https://smartbch.regtest.actorforth.org/
+private_key: ebfe77fbfca1d45ee35799f7aeecc784bfdcebcb8271093f0af212571e651950
 value: 0
