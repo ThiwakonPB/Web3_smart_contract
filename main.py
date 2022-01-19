@@ -2,6 +2,7 @@ import typer
 import os
 import yaml
 
+
 app = typer.Typer()
 
 
@@ -60,7 +61,6 @@ def compile_helper(contract: str):
     print("========================") 
 
 
-
 @app.callback()
 def callback():
     """
@@ -91,7 +91,8 @@ def compile(
                 typer.echo("Abort")
 
         else:
-            compile_helper(contract)
+            text = typer.style(f"{contract} not found...", fg=typer.colors.RED, bold=True)
+            typer.echo(text)
 
 
 @app.command()
