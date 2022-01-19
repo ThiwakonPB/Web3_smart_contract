@@ -78,7 +78,7 @@ def compile(
     """
     if contract == "Bob":
         typer.echo("Please include Contract's name")
-    else:
+    elif os.system(f"ls vyper_src/{contract}") == 0:
         # if contract already compiled before
         if os.system(f"ls data/{contract}") == 0:
             text = typer.style(f"Contract exists overwrite? Σ(°△°|||) [y/N]\n", fg=typer.colors.YELLOW, bold=True)
@@ -91,8 +91,10 @@ def compile(
                 typer.echo("Abort")
 
         else:
-            text = typer.style(f"{contract} not found...", fg=typer.colors.RED, bold=True)
-            typer.echo(text)
+            compile_helper(contract)
+    elif os.system(f"ls vyper_src/{contract}") != 0:
+        text = typer.style(f"{contract} not found...", fg=typer.colors.RED, bold=True)
+        typer.echo(text)
 
 
 @app.command()
