@@ -76,11 +76,12 @@ def compile(
     """
     Compile vyper source code into folder
     """
+
     if contract == "Bob":
         typer.echo("Please include Contract's name")
-    elif os.system(f"ls vyper_src/{contract}") == 0:
-        # if contract already compiled before
-        if os.system(f"ls data/{contract}") == 0:
+    elif os.path.isfile(f"vyper_src/{contract}"):
+        # Confirm contract already compiled before
+        if os.path.isfile(f"data/{contract}"):
             text = typer.style(f"Contract exists overwrite? Σ(°△°|||) [y/N]\n", fg=typer.colors.YELLOW, bold=True)
             user_input = input(text)
             if user_input in input_yes():
@@ -89,10 +90,9 @@ def compile(
                 compile_helper(contract)
             else:
                 typer.echo("Abort")
-
         else:
             compile_helper(contract)
-    elif os.system(f"ls vyper_src/{contract}") != 0:
+    else:
         text = typer.style(f"{contract} not found...", fg=typer.colors.RED, bold=True)
         typer.echo(text)
 
