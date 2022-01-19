@@ -70,7 +70,7 @@ def callback():
 
 @app.command()
 def compile(
-        contract: str = typer.Option(
+        contract: str = typer.Argument(
             "Bob", help="Choose a contract", autocompletion=auto_complete_contract)
         ):
     """
