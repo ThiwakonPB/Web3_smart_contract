@@ -1,9 +1,9 @@
 args: null
-contract_address: '0xBFFF4707541a1F34Dc70D4665ECf7618Ecf0AEC2'
-function_call: supply
-function_transaction: mint
+contract_address: '0xCB67009Cf577aE34dE6b2B8e10b22b954Cc15742'
+function_call: null
+function_transaction: unlock
 gas: 10000000
 gasPrice: 30000000000
 nodeip: https://smartbch.regtest.actorforth.org/
-private_key: ebfe77fbfca1d45ee35799f7aeecc784bfdcebcb8271093f0af212571e651950
+private_key: 5bc275a389c44f6e92a0799cc66004168707c01c6d2914a3deb0745ad537f445
 value: 0
